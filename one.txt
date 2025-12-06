@@ -1,2 +1,133 @@
 this is first file
 add another file to the folder and commit 
+
+
+import React, { useReducer } from 'react'
+
+const initialState = {
+  data: {
+    name: "",
+    age: "",
+    email: "",
+    date: "",
+    state: ""
+  },
+  arr: []
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "UPDATE_INPUT":
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.field]: action.value
+        }
+      };
+
+    case "ADD_DATA":
+      return {
+        ...state,
+        arr: [...state.arr, state.data],
+        data: { name: "", age: "", email: "", date: "", state: "" }
+      };
+
+    default:
+      return state;
+  }
+};
+
+const COmp1 = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const fun = (e) => {
+    dispatch({
+      type: "UPDATE_INPUT",
+      field: e.target.name,
+      value: e.target.value
+    });
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="Enter Name"
+        name="name"
+        value={state.data.name}
+        onChange={fun}
+      />
+
+      <input
+        type="number"
+        placeholder="Enter Age"
+        name="age"
+        value={state.data.age}
+        onChange={fun}
+      />
+
+      <input
+        type="email"
+        placeholder="Enter Email"
+        name="email"
+        value={state.data.email}
+        onChange={fun}
+      />
+
+      <input
+        type="date"
+        placeholder="Enter dob"
+        name="date"
+        value={state.data.date}
+        onChange={fun}
+      />
+
+      <select name="state" value={state.data.state} onChange={fun}>
+        <option value="" disabled>--select--</option>
+        <option value="mh">Mah</option>
+        <option value="mp">Mp</option>
+        <option value="jk">Jk</option>
+        <option value="up">Up</option>
+      </select>
+
+      <button
+        onClick={() => {
+          dispatch({ type: "ADD_DATA" });
+        }}
+      >
+        ADD
+      </button>
+
+      {state.arr.length > 0 && (
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Sr.no</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Email</th>
+              <th>Date</th>
+              <th>Place</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {state.arr.map((obj, i) => (
+              <tr key={i}>
+                <td>{i + 1}</td>
+                <td>{obj.name}</td>
+                <td>{obj.age}</td>
+                <td>{obj.email}</td>
+                <td>{obj.date}</td>
+                <td>{obj.state}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+};
+
+export default COmp1;
